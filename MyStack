@@ -1,0 +1,74 @@
+public class MyStack <T>{
+    Node top;
+    int size;
+
+    public MyStack() {
+        top = null;
+        size = 0;
+    }
+    
+    int getSize(){
+        return size;
+    }
+    void push(T value){
+        Node nodo = new Node(value);
+        if(top == null)
+            top = nodo;
+        else {
+            nodo.next = top;
+            top = nodo;
+        }
+        size++;
+    }
+    // Extra methods
+    void pushButtom(T value){
+        MyStack stk = new MyStack();
+        stk.push(value);
+        this.Reverse();
+        
+        while(!this.isEmpty()){
+            stk.push(this.pop()); 
+        }
+        
+        this.top = stk.top;
+    }
+    
+    T pop(){
+        if(top == null)
+            throw new ArrayIndexOutOfBoundsException();
+        T value = (T) top.data;
+        top = top.next;
+        size--;
+        return value;
+    }
+    
+    T peek(){
+        return (T) top.data;
+    }
+    
+    boolean isEmpty(){
+        return top == null;
+    }
+    
+    void Reverse(){
+        MyStack stk = new MyStack();
+        while(!isEmpty()){
+            stk.push(pop());
+        }
+        this.top = stk.top;
+    }
+   
+    @Override
+    public String toString(){
+         Node curr = top;
+            String str = "[";
+            while(curr != null){
+                str += curr.data;
+                if(curr.next!= null)
+                    str += ", ";
+                curr = curr.next;
+            }
+            str += "]";
+            return str;
+    } 
+}
