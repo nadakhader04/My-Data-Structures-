@@ -1,0 +1,95 @@
+
+import java.util.*;
+
+public class MyQueue <T>{
+    Node first ,last;
+    int size;
+    MyQueue(){
+        first = null; 
+        last = null; 
+        size = 0;
+    }
+    public int size(){
+          return size;
+    }
+    
+    public void EnQueue(T value){
+        Node nodo = new Node(value);
+        if(last == null) { 
+            first = last = nodo ;
+        }
+        else {
+            last.next = nodo;
+            last = nodo;
+        }
+        size++;
+    }
+    public T DeQueue()
+    {
+        if(size == 0) throw new NullPointerException("Out of bounds");
+        Node value = first;
+        first = first.next;
+        if(size == 1) last = first;
+        size--;
+        
+        return (T)value;
+
+    }
+  
+     public boolean isEmpty(){
+         return first == null;
+     }
+
+     public T peek(){
+         if(isEmpty())
+             throw new RuntimeException("No data found!!!");
+          return (T) first.data;
+     }
+
+     public void AddByIndex(T value , int index){
+         if(index < 0 || index > size) throw new NullPointerException("Out of bounds");
+
+         Node cur = first;
+         int i = 0 ,len = size+1;
+         while(len-- !=0){
+             if(i==index){
+                 this.EnQueue(value);
+                 i++;
+             }
+             else{
+                 Node saved = cur;
+                 cur = cur.next;
+                 i++;
+                 this.DeQueue();
+                 this.EnQueue((T) saved.data);
+             }
+         }
+     }
+     
+     public void Reverse(){
+         MyStack stk = new MyStack();
+         while(!this.isEmpty()){
+             stk.push(this.DeQueue());
+         }
+         while(!stk.isEmpty()){
+             this.EnQueue((T) stk.pop());
+         }
+         
+     }
+
+      @Override
+     public String toString(){
+         Node curr = first;
+            String str = "[";
+            while(curr != null){
+                str += curr.data;
+                if(curr.next!= null)
+                    str += ", ";
+                curr = curr.next;
+            }
+            str += "]";
+            return str;
+    } 
+     
+
+}
