@@ -1,0 +1,248 @@
+class MyLinkedList <T>{
+    Node head, tail;
+    int size = 0;
+    
+    int getSize(){
+        return size;
+    }
+    
+    void AddFirt(T value){
+        Node nodo = new Node(value);
+        if(head == null){
+            head = tail = nodo;
+        }
+        else {
+            nodo.next = head;
+            head = nodo;
+        }
+        size++;            
+    }
+    
+    void AddLast(T value){
+        Node nodo = new Node(value);
+        if(head == null) 
+            head = tail = nodo;
+        
+        else {
+            tail.next = nodo;
+            tail = nodo;
+        }
+        size++;
+    }
+    
+    void AddByIndex(int Idx, T value){
+        Node nodo = new Node(value);
+        int i = 0;
+        Node curr = head;
+        while(curr!= null){
+            if(i == Idx-1)
+                break;
+            curr = curr.next;
+            i++;
+        }
+        nodo.next = curr.next;
+        curr.next = nodo;
+    }
+    
+    T RemoveFirst(){
+        Node curr = head, saved = head;
+        head = head.next;
+        curr = null;
+        size--;
+        
+        return (T)saved.data;
+    }
+    
+    T RemoveLast(){
+        if (head == null)
+            throw new RuntimeException("There is no data!!!");
+        
+        
+        T saved = (T)tail.data;
+        if (head == tail) 
+            head = tail = null;
+        else{   
+            Node curr = head;
+            while(curr.next != tail){
+                curr = curr.next;
+            }
+      
+        curr.next = null;
+        tail = curr;
+        }
+        size--;
+                    
+        return saved;
+    }
+    
+    T RemoveByIndex(int Idx){
+        
+        if (head == null)
+            throw new RuntimeException("There is no data!!!");
+         
+        if (Idx < 0 || Idx >= size)
+            throw new NullPointerException("Out of link bounds");
+       
+        if(Idx == 0){
+            return RemoveFirst();
+        }
+        
+        if(Idx == size-1)
+            return RemoveLast();
+        
+            Node curr = head;
+            T saved;
+            while (Idx > 1) {
+                curr = curr.next;
+                Idx--;
+            }
+            saved = (T) curr.next.data;
+            curr.next = curr.next.next;
+        
+        return saved;
+    }
+    
+    T get(int Idx){
+        if(Idx >= size || Idx < 0)
+            throw new ArrayIndexOutOfBoundsException("Index : " + Idx);
+        
+            int i = 0;
+            Node curr = head;
+            while(curr != null){
+                if(i == Idx)
+                    return (T)curr.data;
+                i++;
+                curr = curr.next;
+            }
+        
+        return (T)new Node(-1000000).data;
+    }
+    
+    public void clear(){
+        head = tail = null;
+    }
+    
+    void set(int Idx, T value){
+        int i = 0;
+        Node curr = head;
+        while(curr != null){
+            if(i == Idx)
+                curr.data = value;
+            i++;
+            curr = curr.next;
+        }
+    }
+    
+    int IndexOf(T value){
+        int i = 0;
+        Node curr = head;
+        while(curr != null){
+            if(value == curr.data)
+                return i;
+            i++;
+            curr = curr.next;
+        }
+        return -1;
+    }
+    
+    int lastIndexOf(T value){
+        int i = 0,Idx = -1;
+        Node curr = head;
+        while(curr != null){
+            if(value == curr.data)
+                Idx = i;
+            i++;
+            curr = curr.next;
+        }
+        return Idx;
+    }
+    boolean contains(T value){
+        return IndexOf(value) != -1;
+    }
+    
+    Node mid(){
+        Node  slow, fast;
+        slow = fast = head;
+        
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+    
+    
+    void RemoveRange(int index1, int index2){
+        if(head == null) 
+            throw new RuntimeException("No data found!!!");
+        
+        if(index1 > index2 || (index1 < 0 && index2 > size) || (index1 < 0 && index1 > size))
+            throw new NullPointerException("Out of bounds"); 
+        
+        int i = 0;
+        boolean flag = false;
+        Node curr = head, curr1 = null, curr2 = null;
+         if(index1 == 0){ index1++; flag = true;}
+        while(curr!= null){
+            if(i == index1 - 1)
+                curr1 = curr;
+            if(i == index2)
+                curr2 = curr;
+            i++;
+            curr = curr.next;
+        }
+        curr1.next = curr2.next;
+        if(flag) head = head.next;
+    }
+    
+    
+    
+    void RotatLeft() {
+        Node curr = head;
+        while (curr.next != null) {
+            curr = curr.next;
+        }
+        curr.next = head;
+        head = head.next;
+        curr.next.next = null;
+    }
+
+    void RotatRight() {
+        Node curr = head;
+        while (curr.next.next != null) {
+            curr = curr.next;
+        }
+        curr.next.next = head;
+        head = curr.next;
+        curr.next = null;
+        
+    }
+    
+    void Reverse(){
+        Node pre = null, curr = head, next;
+        
+        while(curr != null){
+            next = curr.next;
+            curr.next = pre;
+            pre = curr;
+            curr = next;
+        }
+        head = pre;
+    }
+    
+
+    @Override
+        public String toString(){
+            Node curr = head;
+            String str = "[";
+            while(curr != null){
+                if (curr == tail)
+                    str += curr.data;
+                else
+                    str += curr.data + ", ";
+                curr = curr.next;
+            }
+            str += "]";
+            return str;
+        }
+}
