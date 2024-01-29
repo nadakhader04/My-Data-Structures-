@@ -1,0 +1,170 @@
+
+package com.mycompany.node;
+
+public class BST {
+    private Node root;
+    
+    void insert(Integer val){ 
+        if(seatch(val)) return;
+        Node p = new Node(val);
+        if(root == null){
+            root = p;    
+            return;
+        }
+        while(true){
+            
+            Node curr = root;
+            if(val < (Integer)curr.data){
+                if(curr.left != null) {
+                    curr = curr.left;
+                }
+                else{
+                    curr.left = p;
+                    break;
+                }
+            }
+            
+            else {
+                 if(curr.right != null) {
+                    curr = curr.right;
+                }
+                else{
+                    curr.right = p;
+                     break;
+                }
+            }
+        }
+    }
+    
+    void recIntert(Integer val){
+        root = recInsert(root, val);
+    }
+    private Node recInsert(Node curr, Integer val) {
+        if(curr == null){
+            curr = new Node(val); 
+            return curr;
+        }
+        if(val < (Integer)curr.data){
+            curr.left = recInsert(curr.left, val);
+        }
+        else if(val > (Integer)curr.data){
+            curr.right = recInsert(curr.right, val);
+        }
+        return curr;
+    }
+    
+    
+    void inOrder(){
+        RecInOrder(root);
+    }
+    private void RecInOrder(Node root){
+        if(root == null) return;
+        RecInOrder(root.left);
+        System.out.print(root.data+" ");
+        RecInOrder(root.right);
+    }
+
+    void preOrder(){
+        RecInOrder(root);
+    }
+    private void RecPreOrder(Node root) {
+        if(root == null) return; 
+        System.out.print(root.data+" ");
+        RecPreOrder(root.left);
+        RecPreOrder(root.right);
+    }
+    
+     void postOrder(){
+        RecInOrder(root);
+    }
+    private void RecPostOrder(Node root) {
+        if(root == null) return; 
+        RecPostOrder(root.left);
+        RecPostOrder(root.right);
+        System.out.print(root.data+" ");
+
+    }
+
+    
+    boolean seatch(Integer x){
+        return search(root, x);
+    }
+
+    private boolean search(Node curr, Integer x) {
+        if(curr == null) return false;
+        if(x < (Integer)curr.data){
+            return search(curr.left,x);
+        }
+        else if(x > (Integer) curr.data){
+            return search(curr.right, x);
+        }
+        return true;
+    }
+    
+    Integer minimum(){
+        return minimum(root);
+    }
+
+    private Integer minimum(Node root) {
+        if(root == null)
+            return -1;
+        
+        if(root.left == null) 
+            return (Integer)root.data;
+        
+        return minimum(root.left);
+    }
+    
+    Integer maximum(){
+        return maximum(root);
+    }
+
+    private Integer maximum(Node root) {
+        if(root == null)
+            return -1;
+        
+        if(root.right == null) 
+            return (Integer)root.data;
+        
+        return maximum(root.right);
+    }
+    
+    void printLeafNode(){
+        PrintLeafNode(root);
+    }
+
+    private void PrintLeafNode(Node root) {
+        if(root == null) return;
+        
+        if(root.left == null && root.left == null)
+            System.out.print(root.data+ " ");
+        
+        PrintLeafNode(root.left);
+        PrintLeafNode(root.right);
+    }
+    
+    void remove(Integer val){
+        root =  remove(root,val);
+    }
+    
+    private Node remove(Node root, int val){
+        if(root == null) return null;
+        
+        else if((Integer)root.data > val){
+            root.left = remove(root.left, val);
+        }
+        else if((Integer)root.data < val){
+            root.right = remove(root.right,val);
+        }
+        
+        else if(root.left == null) return root.right;
+        else if(root.right == null) return root.left;
+        
+        else {
+            root.data = minimum(root.right);
+            root.right = remove(root.right, (Integer)root.data);
+        }
+       
+        return root;
+    }
+}
